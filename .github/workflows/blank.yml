@@ -9,17 +9,40 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
-
+      
+      - name: Configurar SSH y desplegar en Ubuntu
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.  }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+        run: |
+          # Configurar clave SSH
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
+          
+          # Conectarse al servidor y ejecutar los comandos
+          ssh $SERVER_USER@$SERVER_HOST << 'EOF'
+            cd /ruta/del/proyecto
+            git pull origin main
+            docker compose up --build -d
+          EOF
       - name: Verificar archivos en el workspace
         run: ls -la $GITHUB_WORKSPACE
 
       - name: Verificar versión de Docker Compose
         run: docker compose version || docker-compose version
 
-      - name: Ejecutar Docker Compose
-        run: docker compose -f $GITHUB_WORKSPACE/docker-compose.yml up --build -d
+      - name: Desplegar en Ubuntu con Docker Compose
+        run: |
+          ssh $SERVER_USER@$SERVER_HOST << 'EOF'
+            cd /ruta/del/proyecto
+            git pull origin main
+            docker compose up --build -d
+          EOF
