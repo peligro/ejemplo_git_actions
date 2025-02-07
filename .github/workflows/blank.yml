@@ -14,10 +14,10 @@ jobs:
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
-      
+
       - name: Configurar SSH y desplegar en Ubuntu
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.  }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Se corrigió la referencia a la variable secreta
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
         run: |
@@ -26,23 +26,16 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
-          
+
           # Conectarse al servidor y ejecutar los comandos
-          ssh $SERVER_USER@$SERVER_HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
             cd /ruta/del/proyecto
             git pull origin main
             docker compose up --build -d
           EOF
+
       - name: Verificar archivos en el workspace
         run: ls -la $GITHUB_WORKSPACE
 
       - name: Verificar versión de Docker Compose
         run: docker compose version || docker-compose version
-
-      - name: Desplegar en Ubuntu con Docker Compose
-        run: |
-          ssh $SERVER_USER@$SERVER_HOST << 'EOF'
-            cd /ruta/del/proyecto
-            git pull origin main
-            docker compose up --build -d
-          EOF
