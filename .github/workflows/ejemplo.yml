@@ -22,6 +22,9 @@ jobs:
       BD_HOST: localhost
       BD_USER: cesar
       BD_PASSWORD: 123456
+      BD_HOST_SECRET: ${{secrets.BD_HOST_SECRET}}
+      BD_PASSWORD_SECRET: ${{secrets.BD_PASSWORD_SECRET}}
+      BD_USER_SECRET: ${{secrets.BD_USER_SECRET}}
     # El tipo de corredor en el que se ejecutará el trabajo
     runs-on: ubuntu-latest
 
@@ -61,3 +64,15 @@ jobs:
           echo "GITHUB_ACTION_PATH: $GITHUB_ACTION_PATH",
           echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY",
           echo "GITHUB_ACTOR: $GITHUB_ACTOR",
+    
+     # Ejemplo de job 6
+      - name: Paso 6 - mostrando secretos
+        run: |
+          echo "BD_HOST_SECRET: ${{env.BD_HOST_SECRET}}",
+          echo "BD_USER_SECRET: ${{env.BD_USER_SECRET}}",
+          echo "BD_PASSWORD: ${{env.BD_PASSWORD}}"
+      
+      - name: Paso 7 - mostrando secretos condicionados
+        if: ${{env.ENVIRONMENT_SECRET=='local-secreto'}}
+        run: |
+          echo "se muestra ENVIRONMENT_SECRET"
