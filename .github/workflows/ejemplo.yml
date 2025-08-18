@@ -52,3 +52,10 @@ jobs:
           echo "BD_HOST: ${{env.BD_HOST}}",
           echo "BD_USER: ${{env.BD_USER}}",
           echo "BD_PASSWORD: ${{env.BD_PASSWORD}}"
+
+      # Ejemplo de job 5
+      - name: Paso 5 - variables predefinidas 
+        run: |
+          echo "Evento: ${{github.event}}",
+          echo "GITHUB_ACTION_REPOSITORY: ${{github.GITHUB_ACTION_REPOSITORY}}",
+          echo "Evento json: ${{toJson(github.event)}}"
