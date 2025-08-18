@@ -47,7 +47,7 @@ jobs:
 
       # Ejemplo de job 4
       - name: Paso 4 - condición
-        if: ${{env.ENVIRONMENT=='local'}}
+        if: ${{env.ENVIRONMENT=='production'}}
         run: |
           echo "BD_HOST: ${{env.BD_HOST}}",
           echo "BD_USER: ${{env.BD_USER}}",
