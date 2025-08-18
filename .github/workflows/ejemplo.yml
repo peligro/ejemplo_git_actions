@@ -18,6 +18,7 @@ jobs:
   # Este flujo de trabajo contiene un único trabajo llamado "construir"
   construir:
     env:
+      ENVIRONMENT: production
       BD_HOST: localhost
       BD_USER: cesar
       BD_PASSWORD: 123456
@@ -38,6 +39,15 @@ jobs:
       
       # Ejemplo de job 3
       - name: Paso 3 - mostrando variables de entorno
+        run: |
+          echo "BD_HOST: ${{env.BD_HOST}}",
+          echo "BD_USER: ${{env.BD_USER}}",
+          echo "BD_PASSWORD: ${{env.BD_PASSWORD}}"
+      
+
+      # Ejemplo de job 4
+      - name: Paso 4 - condición
+        if: ${{env.ENVIRONMENT=='local'}}
         run: |
           echo "BD_HOST: ${{env.BD_HOST}}",
           echo "BD_USER: ${{env.BD_USER}}",
