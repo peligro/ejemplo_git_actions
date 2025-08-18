@@ -71,9 +71,13 @@ jobs:
         run: |
           echo "BD_HOST_SECRET: ${{env.BD_HOST_SECRET}}",
           echo "BD_USER_SECRET: ${{env.BD_USER_SECRET}}",
-          echo "BD_PASSWORD: ${{env.BD_PASSWORD}}"
+          echo "BD_PASSWORD_SECRET: ${{env.BD_PASSWORD_SECRET}}"
       
       - name: Paso 7 - mostrando secretos condicionados
         if: ${{env.ENVIRONMENT_SECRET=='local-secreto'}}
         run: |
           echo "se muestra ENVIRONMENT_SECRET"
+
+      # Ejemplo de job 7
+      - name: Paso 7 variables secret de entorno
+        run: echo VARIABLE_PROYECTO= ${{vars.VARIABLE_PROYECTO}}
